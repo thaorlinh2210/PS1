@@ -84,8 +84,15 @@ float Polygon::getSignedArea() const noexcept {
 Polygon Polygon::transform(const Matrix3x3& aMatrix) const noexcept {
     Polygon transformedPolygon;
     for (size_t i = 0; i < fNumberOfVertices; i++) {
-        
-
+        transformedPolygon.fNumberOfVertices = fNumberOfVertices;
+        const Vector2D& point = getVertex(i);
+        Vector3D vector = Vector3D(point.x(), point.y(), 1.0f);
+        // Transform the vertex using matrix-vector multiplication
+        Vector3D vector2 = aMatrix * vector;
+        // Convert the transformed vertex back to a 2D vector
+        transformedPolygon.fVertices[i] = Vector2D(vector2.x(), vector2.y());
     }
+ 
+    // Store the transformed vertex in the new polygon
     return transformedPolygon;
 }
